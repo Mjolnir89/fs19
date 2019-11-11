@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<placeable>
+    <storeData>
+        <name>Gold_Processor</name>
+        <image>placeables/goldprocessor/store.dds</image>
+        <price>45000</price>
+		<canBeSold>false</canBeSold>
+        <showInStore>true</showInStore>
+        <dailyUpkeep>10</dailyUpkeep>
+        <lifetime>1000</lifetime>
+        <rotation>0</rotation>
+        <brand>Lizard</brand>
+        <specs>
+            <capacity>500000</capacity>
+            <fillTypes>dirt water ballast gold</fillTypes>
+        </specs>
+		<functions>
+			<function>$l10n_function_Gold_processor</function>
+        </functions>
+        <species>placeable</species>
+        <category>misc</category>
+    </storeData>
+
+    <placeableType>GC_ProductionFactoryPlaceable</placeableType>
+    <filename>placeables/goldprocessor/gold.i3d</filename>
+    <placement testSizeX="10" testSizeZ="5" sizeX="15" sizeZ="8" useRandomYRotation="false" useManualYRotation="true" />
+		
+	<productionFactories>
+		<productionFactory indexName="GOLD" saveId="globalCompany_goldprocessor">
+			<guiInformation title="Mining_Construction_Economy_GlobalCompanyPlaceable_Gold_FactoryName" imageFilename="placeables/goldprocessor/store.dds" description="Mining_Construction_Economy_GlobalCompanyPlaceable_Gold_FactoryDescription" cameraFeed="gui_camera"/>
+			
+			<operation updateDelayMinutes="10" showInGlobalGUI="true" />
+			
+			<registerUnloadingTriggers>
+				<unloadingTrigger name="Dirt" exactFillRootNode="exactFillRootNode1" />
+				<unloadingTrigger name="Water" exactFillRootNode="exactFillRootNode2" palletTriggerNode="palletTrigger" />
+			</registerUnloadingTriggers>
+
+			<registerLoadingTriggers>
+				<loadingTrigger name="LoadingTrigger" triggerNode="trigger" fillLitersPerSecond="500" autoStart="false">
+					<dischargeInfo dischargeNode="dischargeNode1" />
+					<sounds fillSoundIdentifier="fillSound01" />
+					<effectNode effectNode="grain" materialType="unloading" materialTypeId="3" fadeTime="0.5" />
+					<effectNode effectNode="smoke" materialType="smoke"     materialTypeId="1" fadeTime="0.5" />
+				</loadingTrigger>
+			</registerLoadingTriggers>
+			
+			<registerInputProducts>				
+				<inputProduct name="dirt" capacity="500000" title="Mining_Construction_Economy_GlobalCompany_Gold_Input1" > 
+					<fillTypes>
+						<fillType name="dirt" />
+					</fillTypes>
+					
+					<purchase fixedPricePerLitre="1.6" /> <!-- A little more than buying a pallet of wheat -->
+					
+					<inputMethods>
+						<unloadingTrigger name="Dirt"/>
+					</inputMethods>						
+					
+					<digitalDisplays>
+						<display displayType="LEVEL" numbers="IN_Display1" emptyNumberColor="1 0 0 1" numberColor="1 1 0 1" fullNumberColor="0 1 0 1"/>
+					</digitalDisplays>
+				</inputProduct>
+				<inputProduct name="water" capacity="500000" title="Mining_Construction_Economy_GlobalCompany_Gold_Input2">
+					<fillTypes>
+						<fillType name="water" />
+					</fillTypes>				
+					
+					<purchase fixedPricePerLitre="1.3" /> <!-- A little more than buying a tank -->
+					
+					<inputMethods>
+						<unloadingTrigger name="Water"/>
+					</inputMethods>		
+					
+					<!--movers>
+						<mover node="plane1">
+							<scale minimum="0.99 0 0.99" maximum="0.99 0.99 0.99" />
+						</mover>
+						<mover node="plane2">
+							<scale minimum="0.99 0 0.99" maximum="0.99 0.99 0.99" />
+						</mover>
+					</movers-->				
+					
+					<digitalDisplays>
+						<display displayType="LEVEL" numbers="IN_Display2" emptyNumberColor="1 0 0 1" numberColor="1 1 0 1" fullNumberColor="0 1 0 1"/>
+					</digitalDisplays>
+				</inputProduct>
+			</registerInputProducts>
+			
+			<registerOutputProducts>
+				<outputProduct name="gold" fillType="gold" capacity="4000" >
+					<outputMethods>
+						<palletCreators fillType="gold" palletCapacity="4000" xmlFilename="placeables/goldprocessor/gold_box.xml" activateDebugDraw="false">
+							<palletCreator node="palletSpawnerPlaceNode1" palletInteractionTrigger="interactionTriggerPallet1"/>
+						</palletCreators>
+					</outputMethods>	
+					<digitalDisplays>
+						<display displayType="LEVEL" numbers="OP_Display1" emptyNumberColor="0 1 0 1" numberColor="1 1 0 1" fullNumberColor="1 0 0 1"/>
+					</digitalDisplays>
+				</outputProduct>
+				<outputProduct name="ballast" fillType="ballast" capacity="500000" >
+					<outputMethods>
+						<loadingTrigger name="LoadingTrigger" />
+					</outputMethods>	
+					<digitalDisplays>
+						<display displayType="LEVEL" numbers="OP_Display" emptyNumberColor="0 1 0 1" numberColor="1 1 0 1" fullNumberColor="1 0 0 1"/>
+					</digitalDisplays>
+				</outputProduct>
+			</registerOutputProducts>
+			
+			<productLines>
+				<productLine autoLineStart="true" outputPerHour="15000" title="Mining_Construction_Economy_GlobalCompanyPlaceable_Gold_productLine_gold" showInGUI="true">
+					<inputs>
+						<inputProduct name="dirt" percent="40" />
+						<inputProduct name="water" percent="60" />
+					</inputs>					
+					<outputs>
+						<outputProduct name="gold" percent="0.99" />
+						<outputProduct name="ballast" percent="99" />
+					</outputs>					
+					<playerTrigger playerTriggerNode="PlayerTrigger" showPopupUI="true"/>					
+					<operatingParts>						
+						<sounds>
+							<sound geSoundNode="audio"/>
+						</sounds>
+						<lighting>
+							<beaconLights>
+								<beaconLight node="beacon" filename="$data/shared/assets/beaconLights/lizard/beaconLight01.xml" />
+							</beaconLights>
+						</lighting>
+					</operatingParts>
+				</productLine>
+			</productLines>	
+			
+			<i3dMappings>  
+				<i3dMapping id="exactFillRootNode1" node="0|0|0" />
+				<i3dMapping id="exactFillRootNode2" node="0|1|0" />
+    			<i3dMapping id="IN_Display1" node="0|0|1" />			
+    			<i3dMapping id="IN_Display2" node="0|1|1" />			
+				<i3dMapping id="dischargeNode1" node="1|0|1" />
+				<i3dMapping id="OP_Display" node="1|1" />
+				<i3dMapping id="OP_Display1" node="1|2" />
+				<i3dMapping id="palletSpawnerPlaceNode1" node="1|3|1"/>
+				<i3dMapping id="interactionTriggerPallet1" node="1|3|0"/>
+				<i3dMapping id="PlayerTrigger" node="2" />
+				<i3dMapping id="beacon" node="5" />
+				<i3dMapping id="trigger" node="1|0|0" />
+				<i3dMapping id="grain" node="1|0|2|0" />
+    			<i3dMapping id="smoke" node="1|0|2|1" />
+    			<i3dMapping id="audio" node="6" />
+				<i3dMapping id="palletTrigger" node="0|1|2" />
+				<i3dMapping id="gui_camera" node="7"/>
+			</i3dMappings>				
+		</productionFactory>
+	</productionFactories>
+</placeable>
